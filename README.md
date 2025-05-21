@@ -2,6 +2,8 @@
 
 This repository contains a simple **Chat Application** built with **Flutter** and **Firebase**, completed as part of the **Flutter Development Intern Assignment**. The application supports email/password authentication and basic real-time chat functionality.
 
+https://github.com/user-attachments/assets/1049c3f7-499b-4b7e-9315-71ec3d789205
+
 ## 🚀 Features
 
 ### ✅ Authentication
