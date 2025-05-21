@@ -88,9 +88,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Sign Up Screen', style: TextStyle(fontSize: 20)),
-      ),
+      // appBar: AppBar(
+      //   title: Text('Sign Up Screen', style: TextStyle(fontSize: 20)),
+      // ),
       backgroundColor: Colors.grey[100],
       body: Center(
         child: SingleChildScrollView(
