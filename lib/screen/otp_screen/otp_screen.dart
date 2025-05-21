@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
-  const OtpVerificationScreen({super.key});
+  final  String verificationId;
+  const OtpVerificationScreen({super.key,required this.verificationId});
 
   @override
   State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
@@ -10,13 +12,23 @@ class OtpVerificationScreen extends StatefulWidget {
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController otpController = TextEditingController();
+  FirebaseAuth auth = FirebaseAuth.instance;
 
-  void _verifyOtp() {
-    if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Verifying OTP...')),
-      );
+  Future<void> _verifyOtp(String verId,String otp)async {
+    try {
+      if (_formKey.currentState!.validate()) {
+
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verId, smsCode: otp);
+         await auth.signInWithCredential(credential);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Verifying OTP successfully')),
+        );
+      }
+
+    }on FirebaseAuthException catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     }
+
   }
 
   @override
@@ -77,7 +89,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: _verifyOtp,
+                  onPressed: () {
+                    _verifyOtp(widget.verificationId, otpController.text);
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),

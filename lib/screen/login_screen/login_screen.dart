@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_assigment/screen/signup_screen/signup_screen.dart';
 
+import '../chat_screen/chat_user_screen.dart';
 import '../phone_screen/phone_auth_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,13 +16,35 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  FirebaseAuth auth =FirebaseAuth.instance;
 
-  Future<void> _login()async {
-    if (_formKey.currentState!.validate()) {
+  Future<void> _login(String email,String password)async {
+    try {
+      if (_formKey.currentState!.validate()) {
+        await auth.signInWithEmailAndPassword(email: email, password: password).then((value) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(
+              backgroundColor: Colors.green,
+              content: Text('Logging Successfully')));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ChatUserScreen(),));
+        },).onError((error, stackTrace) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar( SnackBar(
+              backgroundColor: Colors.red,
+              content: Text(error.toString())));
+        },);
+        
+      }
+      
+    }
+    on FirebaseAuthException catch(e){
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Logging in...')));
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     }
+    
   }
 
   void _signup() {
@@ -119,7 +143,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: _login,
+                        onPressed:() {
+                          _login(emailController.text, passwordController.text);
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.indigo,
                           foregroundColor: Colors.white,

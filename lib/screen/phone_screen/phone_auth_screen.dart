@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_assigment/screen/otp_screen/otp_screen.dart';
 
@@ -11,15 +12,50 @@ class PhoneAuthPage extends StatefulWidget {
 class _PhoneAuthPageState extends State<PhoneAuthPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController phoneController = TextEditingController();
+  FirebaseAuth auth = FirebaseAuth.instance;
 
-  void _sendOTP() {
-    if (_formKey.currentState!.validate()) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return OtpVerificationScreen();
-      },));
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sending OTP...')),
-      );
+  Future<void> _sendOTP(String phoneNumber) async {
+    try {
+      if (_formKey.currentState!.validate()) {
+        await auth.verifyPhoneNumber(
+          phoneNumber: phoneNumber,
+          verificationCompleted: (PhoneAuthCredential credential) async {
+            await auth.signInWithCredential(credential);
+          },
+          verificationFailed: (error) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.red,
+                content: Text(error.toString()),
+              ),
+            );
+          },
+          codeSent: (veId, forceResendingToken) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.green,
+                content: Text('OTP has been sent on your phone number'),
+              ),
+            );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return OtpVerificationScreen(verificationId: veId,);
+                },
+              ),
+            );
+            setState(() {
+
+            });
+          },
+          codeAutoRetrievalTimeout: (verificationId) {},
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
 
@@ -27,14 +63,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Phone Authentication',
-          style: TextStyle(
-
-            fontSize: 20,
-
-          ),
-        ),
+        title: Text('Phone Authentication', style: TextStyle(fontSize: 20)),
       ),
       backgroundColor: Colors.grey[100],
       body: Center(
@@ -81,7 +110,9 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: _sendOTP,
+                  onPressed: () {
+                    _sendOTP(phoneController.text.trim());
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),

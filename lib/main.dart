@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:new_assigment/screen/chat_screen/chat_user_screen.dart';
 import 'package:new_assigment/screen/signup_screen/signup_screen.dart';
+import 'package:new_assigment/screen/splash_screen.dart';
 
 import 'firebase_options.dart';
 
@@ -21,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: SignUpScreen(),
+      home: SplashScreen()
     );
   }
 }

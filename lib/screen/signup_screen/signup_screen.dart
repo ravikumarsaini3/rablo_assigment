@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:new_assigment/screen/chat_screen/chat_user_screen.dart';
 import 'package:new_assigment/screen/login_screen/login_screen.dart';
 import 'package:new_assigment/screen/phone_screen/phone_auth_screen.dart';
 
@@ -27,7 +28,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SnackBar(
                     backgroundColor: Colors.green,
                     content: Text(' account creating  successfully')),
+                
               );
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ChatUserScreen(),));
             })
             .onError((error, stackTrace) {
               ScaffoldMessenger.of(
@@ -179,7 +182,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               TextButton.icon(
                 onPressed: _loginWithPhone,
                 icon: const Icon(Icons.phone),
-                label: const Text("Login with Phone"),
+                label: const Text("Sign with Phone"),
               ),
             ],
           ),
