@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
               content: Text('Logging Successfully')));
           isLoading=false;
           setState(() {
-
+            
           });
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ChatUserScreen(),));
         },).onError((error, stackTrace) {

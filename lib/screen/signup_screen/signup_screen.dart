@@ -17,10 +17,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   FirebaseAuth auth = FirebaseAuth.instance;
+  bool isLoading = false;
 
   Future<void> _signup(String email, String password) async {
     try {
       if (_formKey.currentState!.validate()) {
+
+        setState(() {
+          isLoading=true;
+
+        });
         await auth
             .createUserWithEmailAndPassword(email: email, password: password)
             .then((value) {
@@ -30,9 +36,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     content: Text(' account creating  successfully')),
                 
               );
+              isLoading=false;
+
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ChatUserScreen(),));
             })
             .onError((error, stackTrace) {
+              isLoading=false;
               ScaffoldMessenger.of(
                 context,
               ).showSnackBar(SnackBar(
@@ -41,6 +50,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             });
       }
     } on FirebaseAuthException catch (e) {
+      isLoading=false;
       ScaffoldMessenger.of(
 
         context,
@@ -168,7 +178,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           backgroundColor: Colors.indigo,
                           padding: const EdgeInsets.symmetric(vertical: 14),
                         ),
-                        child: const Text('Sign Up'),
+                        child: isLoading? const CircularProgressIndicator(color: Colors.white,): const Text('Sign Up'),
                       ),
                     ),
                   ],
