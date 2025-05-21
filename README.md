@@ -1,16 +1,29 @@
-# new_assigment
+# 📱 Flutter Chat App
 
-A new Flutter project.
+This repository contains a simple **Chat Application** built with **Flutter** and **Firebase**, completed as part of the **Flutter Development Intern Assignment**. The application supports email/password authentication and basic real-time chat functionality.
 
-## Getting Started
+## 🚀 Features
 
-This project is a starting point for a Flutter application.
+### ✅ Authentication
+- **Sign Up** with Mobile Number, Name, and Email
+- **Sign In** with Email and Password
+- **Log Out/Sign Out**
+- Firebase Authentication integration
+- Only authenticated users can access chat functionalities
 
-A few resources to get you started if this is your first Flutter project:
+### 💬 Chat Functionality
+- Display all registered users available for chat
+- One-to-one messaging system using Firebase UID
+- Real-time chat updates using Firebase Firestore/Realtime Database
+- Messages stored per user UID
+- Support for CRUD operations:
+  - **Create** new messages
+  - **Read** chat messages in real-time
+  - **Update** messages
+  - **Delete** messages
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🔧 Tech Stack
+- **Flutter & Dart**
+- **Firebase Authentication**
+- **Firebase Firestore / Realtime Database**
+- **Firebase Storage** (for optional media/messages)
